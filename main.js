@@ -79,6 +79,11 @@ function createTerminal() {
   term.focus();
   // 全屏
   // term.toggleFullScreen(true);
+
+  var keycode = require('keycode');
+document.addEventListener('keydown', function(e) {
+  console.log("You pressed", keycode(e))
+})
   
   addDomListener(paddingElement, 'change', setPadding);
 
