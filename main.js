@@ -1,10 +1,10 @@
-import * as Terminal from '../build/xterm';
-import * as attach from '../build/addons/attach/attach';
-import * as fit from '../build/addons/fit/fit';
-import * as fullscreen from '../build/addons/fullscreen/fullscreen';
-import * as search from '../build/addons/search/search';
-import * as webLinks from '../build/addons/webLinks/webLinks';
-import * as winptyCompat from '../build/addons/winptyCompat/winptyCompat';
+import * as Terminal from 'build/xterm';
+import * as attach from 'build/addons/attach/attach';
+import * as fit from 'build/addons/fit/fit';
+import * as fullscreen from 'build/addons/fullscreen/fullscreen';
+import * as search from 'build/addons/search/search';
+import * as webLinks from 'build/addons/webLinks/webLinks';
+import * as winptyCompat from 'build/addons/winptyCompat/winptyCompat';
 
 
 Terminal.applyAddon(attach);
