@@ -82,10 +82,15 @@ function createTerminal() {
 
   var keycode = require('keycode');
 document.addEventListener('keydown', function(e) {
-  console.log("You pressed", keycode(e))
+  console.log("You pressed", keycode(e),e)
+  // F1
   if (e == 112){
-    term.toggleFullScreen();
-  } 
+    term.toggleFullScreen(true);
+  }
+  // ESC
+  if (e == 27){
+    term.toggleFullScreen(false);
+  }
 })
   
   addDomListener(paddingElement, 'change', setPadding);
