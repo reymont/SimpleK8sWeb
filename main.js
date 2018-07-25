@@ -78,7 +78,7 @@ function createTerminal() {
   term.fit();
   term.focus();
   // 全屏
-  term.toggleFullScreen(true);
+  // term.toggleFullScreen(true);
 
   var keycode = require('keycode');
   document.addEventListener('keydown', function(e) {
