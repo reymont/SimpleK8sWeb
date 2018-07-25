@@ -148,7 +148,9 @@ function runFakeTerminal() {
       !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey
     );
 
-    if (ev.keyCode == 13) {
+    if (ev.keyCode == 112){
+      term.toggleFullScreen();
+    } else if (ev.keyCode == 13) {
       term.prompt();
     } else if (ev.keyCode == 8) {
      // Do not delete the prompt
@@ -157,9 +159,7 @@ function runFakeTerminal() {
       }
     } else if (printable) {
       term.write(key);
-    } else if (ev.keyCode == 112){
-      term.toggleFullScreen();
-    }
+    } 
   }));
 
   term._core.register(term.addDisposableListener('paste', function (data, ev) {
