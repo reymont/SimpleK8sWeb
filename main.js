@@ -78,20 +78,20 @@ function createTerminal() {
   term.fit();
   term.focus();
   // 全屏
-  // term.toggleFullScreen(true);
+  term.toggleFullScreen(true);
 
   var keycode = require('keycode');
-document.addEventListener('keydown', function(e) {
-  console.log("You pressed", keycode(e),e,e.keyCode,e.keyCode == '112', e.keyCode == '27')
-  // F1
-  if (e.keyCode == '112'){
-    term.toggleFullScreen(true);
-  }
-  // ESC
-  if (e.keyCode == '27'){
-    term.toggleFullScreen(false);
-  }
-})
+  document.addEventListener('keydown', function(e) {
+    // console.log("You pressed", keycode(e),e,e.keyCode,e.keyCode == '112', e.keyCode == '27')
+    // F1 全屏
+    if (e.keyCode == '112'){
+      term.toggleFullScreen(true);
+    }
+    // ESC 退出
+    if (e.keyCode == '27'){
+      term.toggleFullScreen(false);
+    }
+  })
   
   addDomListener(paddingElement, 'change', setPadding);
 
