@@ -32,12 +32,12 @@ app.get('/dist/bundle.js.map', function(req, res){
 app.post('/terminals', function (req, res) {
   var cols = parseInt(req.query.cols),
       rows = parseInt(req.query.rows),
-      term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
+      var cmd = "logs -n test02 -f --tail=100 jego-micro-business-user-x2093";
+      //term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
+      term = pty.spawn('kubectl', cmd.split(" "), {
         name: 'xterm-color',
-        // cols: cols || 200,
-        // rows: rows || 50,
-        cols: 200,
-        rows: 50,
+        cols: cols || 80,
+        rows: rows || 24,
         cwd: process.env.PWD,
         env: process.env
       });
