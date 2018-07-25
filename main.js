@@ -77,7 +77,7 @@ function createTerminal() {
   term.webLinksInit();
   term.fit();
   term.focus();
-
+  
   addDomListener(paddingElement, 'change', setPadding);
 
   addDomListener(actionElements.findNext, 'keypress', function (e) {
