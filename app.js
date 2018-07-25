@@ -32,7 +32,7 @@ app.get('/dist/bundle.js.map', function(req, res){
 app.post('/terminals', function (req, res) {
   var cols = parseInt(req.query.cols),
       rows = parseInt(req.query.rows),
-      var cmd = "logs -n test02 -f --tail=100 jego-micro-business-user-x2093";
+      cmd = "logs -n test02 -f --tail=100 jego-micro-business-user-x2093";
       //term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
       term = pty.spawn('kubectl', cmd.split(" "), {
         name: 'xterm-color',
