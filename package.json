@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prestart": "webpack --mode development",
+    "prestart": "webpack",
     "start": "node app.js"
   },
   "dependencies": {
