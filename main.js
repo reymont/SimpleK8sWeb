@@ -78,7 +78,7 @@ function createTerminal() {
   term.fit();
   term.focus();
   // 全屏
-  term.toggleFullScreen(true);
+  // term.toggleFullScreen(true);
   
   addDomListener(paddingElement, 'change', setPadding);
 
@@ -157,8 +157,8 @@ function runFakeTerminal() {
       }
     } else if (printable) {
       term.write(key);
-    } else if (ev.keyCode=27){
-      term.toggleFullScreen(false);
+    } else if (ev.keyCode=70){
+      term.toggleFullScreen();
     }
   }));
 
