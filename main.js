@@ -82,13 +82,13 @@ function createTerminal() {
 
   var keycode = require('keycode');
 document.addEventListener('keydown', function(e) {
-  console.log("You pressed", keycode(e),e,e.key == 112, e.key == 27)
+  console.log("You pressed", keycode(e),e,e.keyCode == '112', e.keyCode == '27')
   // F1
-  if (e.key == 112){
+  if (e.keyCode == '112'){
     term.toggleFullScreen(true);
   }
   // ESC
-  if (e.key == 27){
+  if (e.keyCode == '27'){
     term.toggleFullScreen(false);
   }
 })
