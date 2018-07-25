@@ -83,6 +83,9 @@ function createTerminal() {
   var keycode = require('keycode');
 document.addEventListener('keydown', function(e) {
   console.log("You pressed", keycode(e))
+  if (e == 112){
+    term.toggleFullScreen();
+  } 
 })
   
   addDomListener(paddingElement, 'change', setPadding);
@@ -153,9 +156,7 @@ function runFakeTerminal() {
       !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey
     );
 
-    if (ev.keyCode == 112){
-      term.toggleFullScreen();
-    } else if (ev.keyCode == 13) {
+    if (ev.keyCode == 13) {
       term.prompt();
     } else if (ev.keyCode == 8) {
      // Do not delete the prompt
