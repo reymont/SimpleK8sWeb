@@ -7,7 +7,7 @@ var pty = require('node-pty');
 var terminals = {},
     logs = {};
 
-app.use('/build', express.static(__dirname + '/../build'));
+app.use('/build', express.static(__dirname + '/build'));
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
