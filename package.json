@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prestart": "webpack --mode development --watch --progress --display-modules --colors --display-reasons",
+    "prestart": "webpack --mode development",
     "start": "node app.js"
   },
   "dependencies": {
