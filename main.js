@@ -77,6 +77,7 @@ function createTerminal() {
   term.webLinksInit();
   term.fit();
   term.focus();
+  term.toggleFullScreen(true);
   
   addDomListener(paddingElement, 'change', setPadding);
 
