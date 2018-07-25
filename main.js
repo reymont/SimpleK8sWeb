@@ -77,6 +77,8 @@ function createTerminal() {
   term.webLinksInit();
   term.fit();
   term.focus();
+  term.rows = 50;
+  term.cols = 200;
   // 全屏
   // term.toggleFullScreen(true);
 
