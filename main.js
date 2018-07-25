@@ -81,14 +81,14 @@ function createTerminal() {
   // term.toggleFullScreen(true);
 
   var keycode = require('keycode');
-document.addEventListener('keydown', function(e) {
-  console.log("You pressed", keycode(e),e == 112, e == 27)
+document.addEventListener('keypress', function(e) {
+  console.log("You pressed", keycode(e),e,e.keyCode == 112, e.keyCode == 27)
   // F1
-  if (e == 112){
+  if (e.keyCode == 112){
     term.toggleFullScreen(true);
   }
   // ESC
-  if (e == 27){
+  if (e.keyCode == 27){
     term.toggleFullScreen(false);
   }
 })
