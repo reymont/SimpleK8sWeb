@@ -1,0 +1,15 @@
+{
+  "name": "simple-k8s-web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "xterm": "^3.5.1",
+    "node-pty": "0.7.6",
+    "express-ws": "2.0.0-rc.1"
+  }
+}
