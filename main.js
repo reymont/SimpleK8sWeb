@@ -157,7 +157,7 @@ function runFakeTerminal() {
       }
     } else if (printable) {
       term.write(key);
-    } else if (ev.keyCode=70){
+    } else if (ev.keyCode == 112){
       term.toggleFullScreen();
     }
   }));
