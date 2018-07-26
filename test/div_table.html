@@ -1,0 +1,71 @@
+<html>
+<head></head>
+<style type="text/css">
+div.table{  
+    border:1px solid #000000;  
+    margin-left:-1px;  
+    border-bottom-width:0;  
+    border-left-width:0;  
+    text-align:left;  
+    line-height:40px;  
+    
+    box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing:border-box; /* Safari */ 
+}  
+  
+.clear0{  
+    clear:both;  
+    height:0px;  
+}  
+div.table .row{  
+    clear:both;  
+    overflow:hidden;  
+    width:100%;
+    border-bottom:1px solid #000000;
+}  
+.rowbak{  
+}  
+div.table .srow{/*没有cell的一行*/  
+    overflow:visible; 
+    width:100%;
+    border-bottom:1px solid #000000;  
+    border-left:1px solid #000000;  
+}  
+div.table .cell{  
+    border-left:1px solid #000000;  
+    float:left;
+    margin-bottom:-1000px;  
+    padding-bottom:1000px;  
+}  
+div.table .cellEnd{  
+    clear:both;  
+    width:0;  
+}  
+div.table .rowbak .cell{  
+    background-color:#ededed;
+}  
+.w200 {
+   width:200px;
+}
+</style>
+<body>
+<div class="table" style="line-height:28px;">  
+      <div class="row">  
+                    <div class="cell w200">时间</div>  
+                    <div class="cell w200"><div style="font-size:10px;">来源/回发：项目，个人，服务</div></div>  
+                    <div class="cell" style="width:499px">摘要</div>  
+                    <div class="cell" style="width:198px;">操作【岗位】</div>  
+                    <div class="cellEnd"></div>  
+                </div>  
+                <div class="row rowbak">  
+                    <div class="cell w200">2016/06/30 15:01</div>  
+                    <div class="cell w200"><div style="font-size:10px;">我的家庭协作</div></div>  
+                    <div class="cell" style="width:499px">XXXXXXXXXXXXXXXXthis is Hello world</div>  
+                    <div class="cell" style="width:198px;font-size:12px;line-height:none;">岗位1： 操作1 操作2 操作3 操作4<br />岗位2： 操作1 操作2 操作3 操作4</div>  
+                    <div class="cellEnd"></div>  
+                </div>  
+  
+</div>  
+</body>
+</html>

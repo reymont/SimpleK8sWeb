@@ -4,6 +4,12 @@ var expressWs = require('express-ws')(app);
 var os = require('os');
 var pty = require('node-pty');
 
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.get('/index', function(req, res) {
+  res.render('index', { helloWorld: 'hello,world' });
+})
+
 var terminals = {},
     logs = {};
 
