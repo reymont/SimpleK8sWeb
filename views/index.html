@@ -50,6 +50,43 @@ tbody tr:hover {
 }
 
 </style>
+<script>
+	var ws = new WebSocket('ws://127.0.0.1:8000/ws');
+	ws.onmessage=function(e){
+	  console.log('_message');
+	  console.log(e.data);
+	};
+	ws.onerror=function(err){
+	  console.log('_error');
+	  console.log(err);
+	};
+	ws.onopen=function(){
+	  console.log('_connect')
+	};
+	ws.onclose=function(){
+	  console.log('_close');
+	};
+   
+	var message = {
+        nickname: "benben_2015",
+        email: "123456@qq.com",
+        content: "I love programming"
+    };
+	//添加状态判断，当为OPEN时，发送消息
+	console.log(ws.readyState);
+    //设置连接成功后的回调函数
+    ws.onopen=function () {
+        console.log("socket has been opened");
+        var message = {
+            nickname: "benben_2015",
+            email: "123456@qq.com",
+            content: "I love programming"
+        };
+        message = JSON.stringify(message);
+        ws.send(message);
+    };
+   
+</script>
 </head>
 <body>
         <%= helloWorld %>

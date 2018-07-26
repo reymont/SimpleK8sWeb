@@ -2,12 +2,22 @@ var express = require('express');
 var app = express();
 var expressWs = require('express-ws')(app);
 var os = require('os');
+var util = require('util');
 var pty = require('node-pty');
 
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.get('/index', function(req, res) {
   res.render('index', { helloWorld: 'hello,world' });
+})
+// hello webservice
+app.ws('/ws', function(ws, req) {
+  util.inspect(ws);
+  ws.on('message', function(msg) {
+    console.log('_message');
+    console.log(msg);
+    ws.send('echo:' + msg);
+  });
 })
 
 var terminals = {},
@@ -38,7 +48,7 @@ app.get('/dist/bundle.js.map', function(req, res){
 app.post('/terminals', function (req, res) {
   var cols = parseInt(req.query.cols),
       rows = parseInt(req.query.rows),
-      cmd = "exec -n test02 -it jego-micro-business-user-x2093 bash";
+      cmd = "exec -n test02 -it nginx-06hc0 bash";
       //cmd = "logs -n test02 -f --tail=100 jego-micro-business-user-x2093";
       //term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
       term = pty.spawn('kubectl', cmd.split(" "), {
