@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prestart": "npm install && webpack",
+    "_prestart": "npm install && webpack",
     "start": "node app.js"
   },
   "dependencies": {

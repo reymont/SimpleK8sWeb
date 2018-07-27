@@ -2,124 +2,96 @@
 <html>
 <head>
 <meta charset="utf-8">
-<style type="text/css">
-table {
- border-collapse: collapse;
- font-family: Futura, Arial, sans-serif;
-}
-caption {
- font-size: larger;
- margin: 1em auto;
-}
-th,td {
- padding: .65em;
-}
-th {
- background: rgb(63, 62, 62) nonerepeat scroll 0 0;
- border: 1px solid #777;
- color: rgb(51, 51, 50);
-}
-td {
- border: 1px solid#777;
-}
-tbody tr:nth-child(odd) {
- background: rgb(250, 115, 5);
-}
+<link rel="stylesheet" href="/build/xterm.css" />
+<link rel="stylesheet" href="/build/addons/fullscreen/fullscreen.css" />
+<link rel="stylesheet" href="style.css" />
+<script src="/build/xterm.js"></script>
+<script src="/build/addons/attach/attach.js"></script>
+<script src="/build/addons/fit/fit.js"></script>
+<script src="/build/addons/search/search.js"></script>
+<script src="/build/addons/webLinks/webLinks.js"></script>
+<script src="/build/addons/winptyCompat/winptyCompat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.min.js"></script>
 
-/*3. 圆角表格*/
-/* th:first-child {
-  border-radius: 9px 0 0 0;
-}
-
-th:last-child {
- border-radius: 0 9px 0 0;
-}
-
-tr:last-child td:first-child {
- border-radius: 0 0 0 9px;
-}
-
-tr:last-child td:last-child {
- border-radius: 0 0 9px 0;
-} */
-
-/*5. 表格行上的立体悬停效果*/
-tbody tr:hover {
- background: linear-gradient(#fff,#aaa);
- font-size: 17px;
-}
-
-</style>
 <script>
-	var ws = new WebSocket('ws://127.0.0.1:8000/ws');
-	ws.onmessage=function(e){
-	  console.log('_message');
-	  console.log(e.data);
-	};
-	ws.onerror=function(err){
-	  console.log('_error');
-	  console.log(err);
-	};
-	ws.onopen=function(){
-	  console.log('_connect')
-	};
-	ws.onclose=function(){
-	  console.log('_close');
-	};
-   
+var ws = new WebSocket('ws://127.0.0.1:8000/ws');
+var message = {
+	nickname: "benben_2015",
+	email: "123456@qq.com",
+	content: "I love programming"
+};
+//添加状态判断，当为OPEN时，发送消息
+console.log(ws.readyState);
+//设置连接成功后的回调函数
+ws.onopen=function () {
+	console.log("socket has been opened");
 	var message = {
-        nickname: "benben_2015",
-        email: "123456@qq.com",
-        content: "I love programming"
-    };
-	//添加状态判断，当为OPEN时，发送消息
-	console.log(ws.readyState);
-    //设置连接成功后的回调函数
-    ws.onopen=function () {
-        console.log("socket has been opened");
-        var message = {
-            nickname: "benben_2015",
-            email: "123456@qq.com",
-            content: "I love programming"
-        };
-        message = JSON.stringify(message);
-        ws.send(message);
-    };
+		nickname: "benben_2015",
+		email: "123456@qq.com",
+		content: "I love programming"
+	};
+	message = JSON.stringify(message);
+	ws.send(message);
+};
+
+window.onload=function(){
+	var pods_name = "<%= pods_name %>".split(",");
+	for(var i in pods_name){
+		//console.log(pods_name[i]);
+		var tr=document.getElementById("pods_tab").insertRow(-1);
+		var num=tr.insertCell(0);
+		var name=tr.insertCell(1);
+		num.innerHTML = i;
+		name.innerHTML = pods_name[i];
+	}
+	var term,
+		protocol,
+		socketURL,
+		socket,
+		pname;
+	protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
+  	socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + '/kubectl/';
+	term = new Terminal({});
+	Terminal.applyAddon(attach);
+	Terminal.applyAddon(fit);
+	var terminalContainer = document.getElementById('terminal-container');
+	term.open(terminalContainer);
+	term.focus();
+	
+	setTimeout(function () {
+		fetch('/kubectl?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then(function (res) {
+			res.text().then(function (pod_name) {
+				pname = pod_name;
+				socketURL += pname;
+				socket = new WebSocket(socketURL);
+				socket.onopen = runRealTerminal;
+				console.log(socketURL)
+			});
+		});
+	}, 0);
+	function runRealTerminal() {
+		term.attach(socket);
+		term._initialized = true;
+	}
+}
    
 </script>
 </head>
 <body>
-        <%= helloWorld %>
-	<table>
+		<%= helloWorld %>
+	<table id="pods_tab">
 		<caption>American Film Institute’s Top Five Films</caption>
 		<thead>
 			<tr>
-				<th>Position
-				<th>Movie
-				<th>Year of Release
+				<th>序号
+				<th>名称
+			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td>1
-				<td>Citizen Kane
-				<td>1941
-			<tr>
-				<td>2
-				<td>The Godfather
-				<td>1972
-			<tr>
-				<td>3
-				<td>Casablanca
-				<td>1942
-			<tr>
-				<td>4
-				<td>Raging Bull
-				<td>1980
-			<tr>
-				<td>5
-				<td>Singin’ In The Rain
-				<td>1952
+			
 		</tbody>
 	</table>
+	<div id="terminal-container"></div>
 </body>
 </html>

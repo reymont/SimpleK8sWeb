@@ -8,7 +8,30 @@ var pty = require('node-pty');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.get('/index', function(req, res) {
-  res.render('index', { helloWorld: 'hello,world' });
+  var exec = require('child_process').exec;
+
+  var pods_name = []
+  exec('kubectl get pods -n test02 -o=json', {
+      encoding: 'utf8',
+      timeout: 0,
+      maxBuffer: 5000 * 1024, // 默认 200 * 1024
+      killSignal: 'SIGTERM'
+  }, function (error, stdout, stderr) {
+      if (error) {
+          console.error('error: ' + error);
+          return;
+      }
+      var pods = JSON.parse(stdout);
+      for(var i in pods.items){
+          pods_name.push(pods.items[i].metadata.name);
+      }
+      //console.log('stderr: ' + typeof stderr);
+      console.log(pods_name.length);
+      for(var i in pods_name){
+          //console.log(pods_name[i]);
+      }
+      res.render('index', { helloWorld: 'hello,world', pods_name: pods_name });
+  });
 })
 // hello webservice
 app.ws('/ws', function(ws, req) {
@@ -21,7 +44,8 @@ app.ws('/ws', function(ws, req) {
 })
 
 var terminals = {},
-    logs = {};
+    logs = {},
+    result = {};
 
 app.use('/build', express.static(__dirname + '/build'));
 
@@ -43,6 +67,51 @@ app.get('/dist/bundle.js', function(req, res){
 
 app.get('/dist/bundle.js.map', function(req, res){
   res.sendFile(__dirname + '/dist/bundle.js.map');
+});
+
+app.post('/kubectl', function (req, res) {
+  var spawn = require('child_process').spawn;
+  var cmd = "logs -n test02 -f --tail=100 jego-micro-business-user-0httf"
+  var term = spawn('kubectl', cmd.split(" "));
+  //监听标准输出流
+  result["jego-micro-business-user-0httf"] = '';
+  term.stdout.on('data', function (data) {
+      result["jego-micro-business-user-0httf"] += data;
+      //console.log(result["jego-micro-business-user-0httf"]);
+  });
+  terminals["jego-micro-business-user-0httf"] = term;
+  res.send("jego-micro-business-user-0httf");
+  res.end();
+});
+app.ws('/kubectl/:pname', function (ws, req) {
+  //console.log(terminals);
+  //console.log(req.params.pname);
+  var term = terminals[req.params.pname];
+  console.log(term);
+  console.log('Connected to terminal ' + req.params.pname);
+  console.log("result: "+result[req.params.pname]);
+  ws.send(result[req.params.pname]);
+  
+
+  term.stdout.on('data', function(data) {
+    try {
+      result[req.params.pname] += data;
+      console.log(result[req.params.pname]);
+      ws.send(result[req.params.pname]);
+    } catch (ex) {
+      // The WebSocket is not open, ignore
+    }
+  });
+  ws.on('message', function(msg) {
+    term.write(msg);
+  });
+  ws.on('close', function () {
+    term.kill();
+    console.log('Closed terminal ' + req.params.pname);
+    // Clean things up
+    delete terminals[req.params.pname];
+    delete result[req.params.pname];
+  });
 });
 
 app.post('/terminals', function (req, res) {
