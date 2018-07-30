@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="/build/xterm.css" />
 <link rel="stylesheet" href="/build/addons/fullscreen/fullscreen.css" />
 <link rel="stylesheet" href="style.css" />
+<!-- <script src="/build/jquery-3.3.1.min.js"></script> -->
 <script src="/build/xterm.js"></script>
 <script src="/build/addons/attach/attach.js"></script>
 <script src="/build/addons/fit/fit.js"></script>
@@ -35,8 +36,15 @@ ws.onopen=function () {
 	ws.send(message);
 };
 
+var term,
+	protocol,
+	socketURL,
+	socket,
+	pname;
+
 window.onload=function(){
 	var pods_name = "<%= pods_name %>".split(",");
+	// 动态新增行
 	for(var i in pods_name){
 		//console.log(pods_name[i]);
 		var tr=document.getElementById("pods_tab").insertRow(-1);
@@ -45,31 +53,52 @@ window.onload=function(){
 		num.innerHTML = i;
 		name.innerHTML = pods_name[i];
 	}
-	var term,
-		protocol,
-		socketURL,
-		socket,
-		pname;
-	protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
-  	socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + '/kubectl/';
-	term = new Terminal({});
-	Terminal.applyAddon(attach);
-	Terminal.applyAddon(fit);
-	var terminalContainer = document.getElementById('terminal-container');
-	term.open(terminalContainer);
-	term.focus();
+	// 动态添加点击事件
+	var rows=document.getElementById("pods_tab").rows;
+	if(rows.length>0){
+		for(var i=1;i<rows.length;i++){
+			(function(i){
+				//var temp=rows[i].cells[0].childNodes[1].value;
+				var temp=rows[i].cells[1].innerText;
+				var obj=rows[i];
+				//obj.ondblclick=function(){console.log(temp);};
+				obj.onclick=function(){
+					console.log(temp);
+					
+					protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
+					socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + '/kubectl/';
+					term = new Terminal({});
+					Terminal.applyAddon(attach);
+					Terminal.applyAddon(fit);
+
+					var terminalContainer = document.getElementById('terminal-container');
+
+					while (terminalContainer.children.length) {
+						terminalContainer.removeChild(terminalContainer.children[0]);
+					}
+
+					term.open(terminalContainer);
+					term.focus();
+					
+					setTimeout(function () {
+						fetch('/kubectl?select_pod=' + temp, {method: 'POST'}).then(function (res) {
+							res.text().then(function (pod_name) {
+								pname = pod_name;
+								socketURL += pname;
+								socket = new WebSocket(socketURL);
+								socket.onopen = (function () {
+													term.attach(socket);
+													term._initialized = true;
+												});
+								console.log(socketURL);
+							});
+						});
+					}, 0);
+				};
+			})(i)
+		}
+	}
 	
-	setTimeout(function () {
-		fetch('/kubectl?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then(function (res) {
-			res.text().then(function (pod_name) {
-				pname = pod_name;
-				socketURL += pname;
-				socket = new WebSocket(socketURL);
-				socket.onopen = runRealTerminal;
-				console.log(socketURL)
-			});
-		});
-	}, 0);
 	function runRealTerminal() {
 		term.attach(socket);
 		term._initialized = true;

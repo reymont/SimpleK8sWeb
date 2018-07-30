@@ -71,32 +71,35 @@ app.get('/dist/bundle.js.map', function(req, res){
 
 app.post('/kubectl', function (req, res) {
   var spawn = require('child_process').spawn;
-  var cmd = "logs -n test02 -f --tail=100 jego-micro-business-user-0httf"
+  var pname = req.query.select_pod;
+  var cmd = "logs -n test02 -f --tail=100 "+pname;
+  // var cmd = "exec -it -n test02 "+pname+" bash";
+  console.log(cmd);
   var term = spawn('kubectl', cmd.split(" "));
   //监听标准输出流
-  result["jego-micro-business-user-0httf"] = '';
+  result[pname] = '';
   term.stdout.on('data', function (data) {
-      result["jego-micro-business-user-0httf"] += data;
+      result[pname] += data;
       //console.log(result["jego-micro-business-user-0httf"]);
   });
-  terminals["jego-micro-business-user-0httf"] = term;
-  res.send("jego-micro-business-user-0httf");
+  terminals[pname] = term;
+  res.send(pname);
   res.end();
 });
 app.ws('/kubectl/:pname', function (ws, req) {
   //console.log(terminals);
   //console.log(req.params.pname);
   var term = terminals[req.params.pname];
-  console.log(term);
-  console.log('Connected to terminal ' + req.params.pname);
-  console.log("result: "+result[req.params.pname]);
+  // console.log(term);
+  console.log('Connected to pod terminal ' + req.params.pname);
+  // console.log("result: "+result[req.params.pname]);
   ws.send(result[req.params.pname]);
   
 
   term.stdout.on('data', function(data) {
     try {
       result[req.params.pname] += data;
-      console.log(result[req.params.pname]);
+      //console.log(result[req.params.pname]);
       ws.send(result[req.params.pname]);
     } catch (ex) {
       // The WebSocket is not open, ignore
