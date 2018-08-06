@@ -1,7 +1,7 @@
 var spawn = require('child_process').spawn;
 
 //var cmd = "logs -n test02 -f --tail=100 jego-micro-business-user-4dafcdf544f700db72200f1258a85356-fn223";
-//var cmd = "exec -n test02 -it nginx-06hc0 bash";
+//var cmd = "exec -n test02 -it jego-micro-business-user-9xm27 bash";
 //var cmd = "get no"
 var cmd = "get pods -n test02 -o=json"
 
