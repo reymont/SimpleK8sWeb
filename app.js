@@ -120,16 +120,18 @@ app.ws('/kubectl/:pname', function (ws, req) {
 app.post('/terminals', function (req, res) {
   var cols = parseInt(req.query.cols),
       rows = parseInt(req.query.rows),
-      cmd = "exec -n test02 -it jego-micro-business-user-9xm27 bash";
-      //cmd = "logs -n test02 -f --tail=100 jego-micro-business-user-x2093";
-      //term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
-      term = pty.spawn('kubectl', cmd.split(" "), {
-        name: 'xterm-color',
-        cols: cols || 80,
-        rows: rows || 24,
-        cwd: process.env.PWD,
-        env: process.env
-      });
+      cmd = "exec -n test02 -it jego-managerportal-socialcontact-svls9 bash";
+  var shell = os.platform() === 'win32' ? 'cmd.exe' : 'bash';
+  //cmd = "logs -n test02 -f --tail=100 jego-micro-business-user-x2093";
+  //term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
+  term = pty.spawn(shell, [], {
+    name: 'xterm-color',
+    cols: cols || 80,
+    rows: rows || 24,
+    cwd: process.env.PWD,
+    env: process.env
+  });
+  term.write('kubectl exec -it -n test02 jego-managerportal-user-xtpb2 bash\r');
 
   console.log('Created terminal with PID: ' + term.pid);
   terminals[term.pid] = term;
