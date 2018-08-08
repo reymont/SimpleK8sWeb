@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>xterm.js demo</title>
+    <title>Simple k8s Web</title>
     <link rel="stylesheet" href="/build/xterm.css" />
     <link rel="stylesheet" href="/build/addons/fullscreen/fullscreen.css" />
     <link rel="stylesheet" href="style.css" />
@@ -9,16 +9,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.min.js"></script>
   </head>
   <body>
-    <h1 style="color: #2D2E2C">xterm.js: A terminal for the <em style="color: #5DA5D5">web</em></h1>
-    <div id="terminal-container"></div>
-    <div>
+    <h1 style="color: #2D2E2C">Simple k8s <em style="color: #5DA5D5">web</em></h1>
+    <div id="terminal-container" style=" float:left;width: 95%"></div>
+    <div style=" float:left">
+    <table id="pods_tab" tyle=" float:left">
+      <thead>
+        <tr>
+          <th>序号
+          <th>名称
+        </tr>
+      </thead>
+      <tbody>
+        
+      </tbody>
+    </table>
+  </div>
+    <!-- <div>
       <h3>Actions</h3>
       <p>
         <label>Find next <input id="find-next"/></label>
         <label>Find previous <input id="find-previous"/></label>
       </p>
-    </div>
-    <div>
+    </div> -->
+    <!-- <div>
       <h3>Options</h3>
       <p>These options can be set in the <code>Terminal</code> constructor or using the <code>Terminal.setOption</code> function.</p>
       <div id="options-container"></div>
@@ -31,8 +44,8 @@
       </div>
     </div>
     <hr/>
-    <p><strong>Attention:</strong> The demo is a barebones implementation and is designed for the development and evaluation of xterm.js only. Exposing the demo to the public as is would introduce security risks for the host.</p>
-    <button id="dispose" title="This is used to testing memory leaks">Dispose terminal</button>
+    <p><strong>Attention:</strong> The demo is a barebones implementation and is designed for the development and evaluation of xterm.js only. Exposing the demo to the public as is would introduce security risks for the host.</p> -->
+    <!-- <button id="dispose" title="This is used to testing memory leaks">Dispose terminal</button> -->
     <script src="dist/bundle.js" defer ></script>
   </body>
 </html>

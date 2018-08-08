@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "_prestart": "npm install && webpack",
-    "start": "node app.js"
+    "_prestart": "npm install",
+    "start": "webpack && node app.js"
   },
   "dependencies": {
     "ejs": "^2.6.1",

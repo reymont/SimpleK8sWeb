@@ -26,13 +26,41 @@ app.get('/index', function(req, res) {
           pods_name.push(pods.items[i].metadata.name);
       }
       //console.log('stderr: ' + typeof stderr);
-      console.log(pods_name.length);
+      //console.log(pods_name.length);
       for(var i in pods_name){
           //console.log(pods_name[i]);
       }
       res.render('index', { helloWorld: 'hello,world', pods_name: pods_name });
   });
-})
+});
+app.get('/pods', function(req, res) {
+  var exec = require('child_process').exec;
+
+  var pods_name = []
+  exec('kubectl get pods -n test02 -o=json', {
+      encoding: 'utf8',
+      timeout: 0,
+      maxBuffer: 5000 * 1024, // 默认 200 * 1024
+      killSignal: 'SIGTERM'
+  }, function (error, stdout, stderr) {
+      if (error) {
+          console.error('error: ' + error);
+          return;
+      }
+      var pods = JSON.parse(stdout);
+      for(var i in pods.items){
+          pods_name.push(pods.items[i].metadata.name);
+      }
+      //console.log('stderr: ' + typeof stderr);
+      //console.log(pods_name.length);
+      for(var i in pods_name){
+          //console.log(pods_name[i]);
+      }
+      res.send(pods_name );
+  });
+});
+
+
 // hello webservice
 app.ws('/ws', function(ws, req) {
   util.inspect(ws);
@@ -120,6 +148,7 @@ app.ws('/kubectl/:pname', function (ws, req) {
 app.post('/terminals', function (req, res) {
   var cols = parseInt(req.query.cols),
       rows = parseInt(req.query.rows),
+      pod = req.query.pod,
       cmd = "exec -n test02 -it jego-managerportal-socialcontact-svls9 bash";
   var shell = os.platform() === 'win32' ? 'cmd.exe' : 'bash';
   //cmd = "logs -n test02 -f --tail=100 jego-micro-business-user-x2093";
@@ -131,7 +160,7 @@ app.post('/terminals', function (req, res) {
     cwd: process.env.PWD,
     env: process.env
   });
-  term.write('kubectl exec -it -n test02 jego-managerportal-user-xtpb2 bash\r');
+  term.write('kubectl exec -it -n test02 '+pod+' bash\r');
 
   console.log('Created terminal with PID: ' + term.pid);
   terminals[term.pid] = term;
